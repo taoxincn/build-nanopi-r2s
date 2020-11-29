@@ -23,18 +23,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@main
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          
       - name: 安装 repo 工具
         run: |
           git clone https://github.com/friendlyarm/repo
@@ -45,7 +35,6 @@ jobs:
           mkdir friendlywrt-rk3328
           cd friendlywrt-rk3328
           repo init -u https://github.com/friendlyarm/friendlywrt_manifests -b master-v19.07.1 -m rk3328.xml --repo-url=https://github.com/friendlyarm/repo  --no-clone-bundle
-          repo sync -c --no-clone-bundle
       
       - name: 同步项目到最新版本
         run: repo sync -c --no-clone-bundle
