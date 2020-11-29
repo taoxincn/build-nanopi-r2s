@@ -40,7 +40,23 @@ jobs:
           repo init -u https://github.com/friendlyarm/friendlywrt_manifests -b master-v19.07.1 -m rk3328.xml --repo-url=https://github.com/friendlyarm/repo  --no-clone-bundle
           repo sync -c  --no-clone-bundle
                 
-      - name: 查看帮助
+      - name: 全自动方式编译
         run: |
           cd friendlywrt-rk3328
-          ./build.sh
+          ./build.sh nanopi_r2s.mk
+          
+      - name: 压缩文件
+        run: |
+          find friendlywrt-rk3328/out/ -name "FriendlyWrt_*img*" | xargs -i zip -r {}.zip {}
+          
+      - name: 将压缩好的固件移动到artifact文件夹中
+        run: |
+          rm -rf ./artifact/
+          mkdir -p ./artifact/
+          find friendlywrt-rk3328/out/ -name "FriendlyWrt_*img.zip*" | xargs -i mv -f {} ./artifact/
+      
+      - name: 上传
+        uses: actions/upload-artifact@main
+        with:
+          name: FriendlyWrt_NanoPi-R2S v19.07
+          path: ./artifact/
